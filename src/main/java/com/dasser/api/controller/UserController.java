@@ -1,8 +1,10 @@
 package com.dasser.api.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +21,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dasser.api.entity.UserRequestModel;
 import com.dasser.api.entity.SearchUser;
 import com.dasser.api.entity.Status;
 import com.dasser.api.entity.User;
 import com.dasser.api.entity.UserHasRole;
 import com.dasser.api.entity.UserHasRolePK;
+import com.dasser.api.service.UserHasRoleService;
 import com.dasser.api.service.UserService;
 import com.dasser.api.util.Constant;
 
@@ -35,6 +39,9 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserHasRoleService userHasRoleService;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -56,35 +63,46 @@ public class UserController {
 	}
 	
 	@PostMapping()
-	public ResponseEntity<?> save(User objUser, Integer role_id) {
+	public ResponseEntity<?> save(@RequestBody UserRequestModel requestUser) {
 		
 		try {
 			
-			User isUserRegistered = userService.findUserByLogin(objUser.getLogin());
+			User objUser = new User();
 			
-			if(isUserRegistered.equals(null)) {
-				String passwordBCypt = passwordEncoder.encode(objUser.getPassword());
+			User isUserRegistered = userService.findUserByLogin(requestUser.getLogin());
+			
+			if(isUserRegistered == null) {
+				String passwordBCypt = passwordEncoder.encode(requestUser.getPassword());
+				
+				BeanUtils.copyProperties(requestUser, objUser);
 				objUser.setPassword(passwordBCypt);
+				objUser.setCreate_date(new Date());
+				objUser.setUpdate_date(new Date());
 				
-				User user = userService.saveUser(objUser);
+				User userSaved = userService.saveUser(objUser);
 				
-				if(user != null) {
+				if(objUser != null) {
 					try {
 						UserHasRolePK userHasRolePK = new UserHasRolePK();
-						userHasRolePK.setUser_id(objUser.getId());
-						userHasRolePK.setRole_id(role_id);
+						userHasRolePK.setUser_id(userSaved.getId());
+						userHasRolePK.setRole_id(requestUser.getRole_id());
 						
 						UserHasRole userHasRole = new UserHasRole();
 						userHasRole.setUserHasRolePK(userHasRolePK);
 						
-						//UserHasRole output = */
+						UserHasRole output = userHasRoleService.save(userHasRole);
 						
+						if(output == null) {
+							userService.deleteUser(userSaved.getId());
+						}
+
 					} catch (Exception e) {
-						// TODO: handle exception
+						e.printStackTrace();
 					}
 				}
 				
-				return ResponseEntity.ok(null);
+				return Constant.responseMessage(HttpStatus.OK, "success", "User has been created.");
+				
 			} else {
 				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User already exists.");
 			}
@@ -120,6 +138,10 @@ public class UserController {
 			if(searchedUser.isPresent()) {
 				User user = searchedUser.get();
 				
+				if(user.getStatus().getId().equals(3)) {
+					return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "The user has already been removed");
+				}
+				
 				Status objStatus = new Status();
 				objStatus.setId(3); // Removed
 				
@@ -127,10 +149,10 @@ public class UserController {
 				User output = userService.saveUser(user);
 				
 				if(output != null) {					
-					return Constant.responseMessage(HttpStatus.OK, "success", "User with id " + id + " has been deleted");
+					return Constant.responseMessage(HttpStatus.OK, "success", "User with id " + id + " has been removed");
 				}
 				
-				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User has not been updated");
+				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User has not been removed");
 				
 			}
 			

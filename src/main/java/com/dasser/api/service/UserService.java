@@ -13,5 +13,6 @@ public interface UserService {
 	public abstract List<User> listAllUsers();
 	public abstract Optional<User> findUserById(int id);
 	public abstract User saveUser(User objUser);
+	public abstract void deleteUser(Integer id);
 
 }

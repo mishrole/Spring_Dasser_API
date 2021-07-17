@@ -34,7 +34,13 @@ public class UserHasRoleController {
 		
 		userHasRoleService.save(userHasRole);
 		return roleService.findRoleByUser(user_id);
-		
+	
 	}
 	
+	@RequestMapping("/delete")
+	@ResponseBody
+	public List<Role> delete(UserHasRole userHasRole) {
+		userHasRoleService.delete(userHasRole);
+		return roleService.findRoleByUser(userHasRole.getUserHasRolePK().getUser_id());
+	}
 }
