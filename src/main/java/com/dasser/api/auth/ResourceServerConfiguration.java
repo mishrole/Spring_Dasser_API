@@ -16,7 +16,7 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 	
 	@Override
 	public void configure(HttpSecurity http)throws Exception {

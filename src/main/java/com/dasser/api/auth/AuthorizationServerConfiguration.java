@@ -31,7 +31,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	private AuthenticationManager authenticationManager;
 	
 	@Autowired
-	private TokenEnhancerConfig tokenEnhancerConfig;
+	private TokenEnhancerConfiguration tokenEnhancerConfig;
 	
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
