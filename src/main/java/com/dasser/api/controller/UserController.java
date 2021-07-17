@@ -25,7 +25,7 @@ public class UserController {
 	private UserService userService;
 	
 	@ResponseBody
-	@GetMapping(value = "/:id")
+	@GetMapping(value = "/search")
 	public List<User> search(@RequestBody SearchUser bean) {
 		return userService.searchUserByNameOrLoginOrStatus(bean);
 	}
