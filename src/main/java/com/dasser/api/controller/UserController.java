@@ -22,12 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dasser.api.entity.SearchUser;
 import com.dasser.api.entity.Status;
 import com.dasser.api.entity.User;
+import com.dasser.api.entity.UserHasRole;
+import com.dasser.api.entity.UserHasRolePK;
 import com.dasser.api.service.UserService;
 import com.dasser.api.util.Constant;
 
 @RestController
 @RequestMapping(value = "/api/v1/users")
-@CrossOrigin(origins = {"http://localhost:8090","http://localhost:8091"},
+@CrossOrigin(origins = {"http://localhost:9191","http://localhost:9292"},
 methods = {RequestMethod.GET,RequestMethod.POST, RequestMethod.PUT,RequestMethod.DELETE})
 public class UserController {
 	
@@ -54,7 +56,7 @@ public class UserController {
 	}
 	
 	@PostMapping()
-	public ResponseEntity<?> save(@RequestBody User objUser) {
+	public ResponseEntity<?> save(User objUser, Integer role_id) {
 		
 		try {
 			
@@ -63,7 +65,26 @@ public class UserController {
 			if(isUserRegistered.equals(null)) {
 				String passwordBCypt = passwordEncoder.encode(objUser.getPassword());
 				objUser.setPassword(passwordBCypt);
-				return ResponseEntity.ok(userService.saveUser(objUser));
+				
+				User user = userService.saveUser(objUser);
+				
+				if(user != null) {
+					try {
+						UserHasRolePK userHasRolePK = new UserHasRolePK();
+						userHasRolePK.setUser_id(objUser.getId());
+						userHasRolePK.setRole_id(role_id);
+						
+						UserHasRole userHasRole = new UserHasRole();
+						userHasRole.setUserHasRolePK(userHasRolePK);
+						
+						//UserHasRole output = */
+						
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+				}
+				
+				return ResponseEntity.ok(null);
 			} else {
 				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User already exists.");
 			}
