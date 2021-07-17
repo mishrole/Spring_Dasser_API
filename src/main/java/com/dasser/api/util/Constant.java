@@ -1,10 +1,19 @@
 package com.dasser.api.util;
 
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.mediatype.problem.Problem;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 public class Constant {
 	
 	public static final String APP_SECRET_KEY = "dasserkey";
+	
 	public static final String APP_CONFIG_CLIENT = "dasser";
+	
 	public static final String APP_CLIENT_PASSWORD = "dasserpwd";
+	
 	public static final String APP_RSA_PUBLIC = "-----BEGIN PUBLIC KEY-----\r\n"
 			+ "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApcoBkJCdPIAXI8tQVvg6\r\n"
 			+ "hih4HE2MoVWXUlOTYf2vuyMakh6pv7/SxAJpX9dmWNiKIo54nkVeyXMdr+XroxVZ\r\n"
@@ -14,6 +23,7 @@ public class Constant {
 			+ "EtiQzLoCRBW7VBOkPvPyZdXHbiPlNG6OkfOPZ9KcpCoGYHzD/0rCW+0kHls0hGw6\r\n"
 			+ "BwIDAQAB\r\n"
 			+ "-----END PUBLIC KEY-----";
+	
 	public static final String APP_RSA_PRIVATE = "-----BEGIN RSA PRIVATE KEY-----\r\n"
 			+ "MIIEogIBAAKCAQEApcoBkJCdPIAXI8tQVvg6hih4HE2MoVWXUlOTYf2vuyMakh6p\r\n"
 			+ "v7/SxAJpX9dmWNiKIo54nkVeyXMdr+XroxVZCouw/A7sEnYIry4anSTDht9XLUSP\r\n"
@@ -42,14 +52,13 @@ public class Constant {
 			+ "ngzRKIYduV6yFLB/DE40kMDh7MX2NSWK0bDJTPwiOir3j2RJX5s=\r\n"
 			+ "-----END RSA PRIVATE KEY-----";
 
-	/*public static ResponseEntity<?> mensaje(HttpStatus status,String title,String detail){
+	public static ResponseEntity<?> responseMessage(HttpStatus status, String title, String detail){
 		return ResponseEntity
 				.status(status)
 				.header(HttpHeaders.CONTENT_TYPE, MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE)
 				.body(Problem.create()
-						.withTitle(title)
-						.withDetail(detail));
-	}*/
-	
+					.withTitle(title)
+					.withDetail(detail));
+	}
 	
 }

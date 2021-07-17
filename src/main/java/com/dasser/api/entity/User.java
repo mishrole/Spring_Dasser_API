@@ -55,7 +55,7 @@ public class User implements Serializable {
 	
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	@ManyToOne
-	@JoinColumn(name = "status", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "status", nullable = false, insertable = true, updatable = true)
 	private Status status;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

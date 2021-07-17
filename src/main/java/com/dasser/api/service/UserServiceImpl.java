@@ -1,6 +1,7 @@
 package com.dasser.api.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		
 		UserDetails userDetails = new org.springframework.security.core.userdetails.User(currentUser.getLogin(), currentUser.getPassword(), roles);
 		return userDetails;
+	}
+
+	@Override
+	public List<User> listAllUsers() {
+		return userRepository.findAll();
+	}
+
+	@Override
+	public Optional<User> findUserById(int id) {
+		return userRepository.findById(id);
+	}
+
+	@Override
+	public User saveUser(User objUser) {
+		return userRepository.save(objUser);
 	}
 }

@@ -21,8 +21,11 @@
 Must be able to:
 - [ ] Register users
 - [ ] Update users
+- [X] Delete users**
 - [ ] Consult registered users
-  
+
+> ** Users will not be deleted, only the status will be updated to Removed.
+
 Considerations:
 - All fields are required
 - Every time a new user is created, the "Create Date" must be kept
@@ -43,21 +46,20 @@ Considerations:
 Diagram of [db_dasser.sql](db_dasser.sql)
 
 
-
-            |----------------------------|              |------------------|
-            |            USER            |----has-a---->|      STATUS      |
-            |----------------------------|              |------------------|
-            |  id (PK)              int  |              |  id (PK)    int  |
-            |  lastname            text  |              |  name      text  |
-            |  firstname           text  |              |------------------|
-            |  login        varchar(255) |
-            |  password            text  |
-            |  status (FK)          int  |              |-------------------------|              |--------------------|
-            |  create_date     timestamp |<----has-a----|      USER_HAS_ROLE      |----has-a---->|        ROLE        |
-            |  update_date     timestamp |              |-------------------------|              |--------------------|
-            |----------------------------|              |  user_id (PK)      int  |              |  id (PK)      int  |
-                                                        |  role_id (PK)      int  |              |  name        text  |
-                                                        |-------------------------|              |--------------------|
+      |----------------------------|              |------------------|
+      |            USER            |----has-a---->|      STATUS      |
+      |----------------------------|              |------------------|
+      |  id (PK)              int  |              |  id (PK)    int  |
+      |  lastname            text  |              |  name      text  |
+      |  firstname           text  |              |------------------|
+      |  login        varchar(255) |
+      |  password            text  |
+      |  status (FK)          int  |              |-------------------------|              |--------------------|
+      |  create_date     timestamp |<----has-a----|      USER_HAS_ROLE      |----has-a---->|        ROLE        |
+      |  update_date     timestamp |              |-------------------------|              |--------------------|
+      |----------------------------|              |  user_id (PK)      int  |              |  id (PK)      int  |
+                                                  |  role_id (PK)      int  |              |  name        text  |
+                                                  |-------------------------|              |--------------------|
 
 ## Technologies
 
