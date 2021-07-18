@@ -102,7 +102,7 @@ public class UserController {
 					}
 				}
 				
-				return Constant.responseMessage(HttpStatus.OK, "success", "User has been created");
+				return Constant.responseMessage(HttpStatus.OK, "Success", "User has been created");
 				
 			} else {
 				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User already exists");
@@ -115,13 +115,56 @@ public class UserController {
 	}
 	
 	@PutMapping()
-	public ResponseEntity<?> update(@RequestBody User objUser) {
+	public ResponseEntity<?> update(@RequestBody UserRequestModel requestUser) {
 		
 		try {
 			
-			String passwordBCypt = passwordEncoder.encode(objUser.getPassword());
-			objUser.setPassword(passwordBCypt);
-			return ResponseEntity.ok(userService.saveUser(objUser));
+			Optional<User> searchedUser = userService.findUserById(requestUser.getId());
+			
+			if(searchedUser.isPresent()) {
+				
+				User objUser = new User();
+				BeanUtils.copyProperties(requestUser, objUser);
+				
+				String passwordBCypt = passwordEncoder.encode(requestUser.getPassword());
+				
+				if(passwordBCypt != searchedUser.get().getPassword()) {
+					objUser.setPassword(passwordBCypt);
+				}
+				
+				objUser.setLogin(searchedUser.get().getLogin());
+				objUser.setCreate_date(searchedUser.get().getCreate_date());
+				objUser.setUpdate_date(new Date());
+				
+				User userSaved = userService.saveUser(objUser);
+				
+				if(userSaved != null) {
+					
+					try {
+						UserHasRolePK userHasRolePK = new UserHasRolePK();
+						userHasRolePK.setUser_id(userSaved.getId());
+						userHasRolePK.setRole_id(requestUser.getRole_id());
+						
+						UserHasRole userHasRole = new UserHasRole();
+						userHasRole.setUserHasRolePK(userHasRolePK);
+						
+						UserHasRole output = userHasRoleService.save(userHasRole);
+						
+						if(output == null) {
+							userService.deleteUser(userSaved.getId());
+						}
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+				}
+				
+				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Success", "User has been updated");
+				
+			} else {
+				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User doesn't exist");
+			}
 	
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -150,7 +193,7 @@ public class UserController {
 				User output = userService.saveUser(user);
 				
 				if(output != null) {					
-					return Constant.responseMessage(HttpStatus.OK, "success", "User with id " + id + " has been removed");
+					return Constant.responseMessage(HttpStatus.OK, "Success", "User with id " + id + " has been removed");
 				}
 				
 				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User has not been removed");
