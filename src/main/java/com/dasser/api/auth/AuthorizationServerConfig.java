@@ -21,7 +21,7 @@ import com.dasser.api.util.Constant;
 
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -31,7 +31,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	private AuthenticationManager authenticationManager;
 	
 	@Autowired
-	private TokenEnhancerConfiguration tokenEnhancerConfig;
+	private TokenEnhancerConfig tokenEnhancerConfig;
 	
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {

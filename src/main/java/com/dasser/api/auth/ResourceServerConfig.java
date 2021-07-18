@@ -16,15 +16,13 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	
 	@Override
 	public void configure(HttpSecurity http)throws Exception {
 		http.authorizeRequests()
-		.antMatchers(HttpMethod.GET, "/**").permitAll()
-		.antMatchers(HttpMethod.DELETE, "/**").permitAll()
-		.antMatchers(HttpMethod.PUT, "/**").permitAll()
-		.antMatchers(HttpMethod.POST, "/**").permitAll()
+		.antMatchers(HttpMethod.GET, "/", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.woff", "/**/*.woff2", "/**/*.png").permitAll()
+		.antMatchers(HttpMethod.GET, "/api/v1/users").permitAll()
 		.antMatchers("/auth/**").permitAll()
 		.anyRequest().authenticated()
 		.and().cors().configurationSource(corsConfigurationSource());

@@ -72,7 +72,6 @@ public class UserController {
 		return Constant.responseMessage(HttpStatus.NOT_FOUND, "Error", "User doesn't exist");
 	}
 	
-	
 	@ResponseBody
 	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<User>> search(@RequestParam(value = "login", required = false) String login, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "status", required = false, defaultValue = "1") Integer status) {
@@ -128,10 +127,10 @@ public class UserController {
 					}
 				}
 				
-				return Constant.responseMessage(HttpStatus.OK, "Success", "User has been created");
+				return Constant.responseMessage(HttpStatus.CREATED, "Success", "User has been created");
 				
 			} else {
-				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User already exists");
+				return Constant.responseMessage(HttpStatus.FOUND, "Error", "User already exists");
 			}
 	
 		} catch (Exception e) {
@@ -226,7 +225,7 @@ public class UserController {
 				
 			}
 			
-			return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User with id " + id + " doesn't exist");
+			return Constant.responseMessage(HttpStatus.NOT_FOUND, "Error", "User with id " + id + " doesn't exist");
 	
 		} catch (Exception e) {
 			e.printStackTrace();

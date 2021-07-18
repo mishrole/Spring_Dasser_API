@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
@@ -43,6 +44,7 @@ public class User implements Serializable {
 	@Column(unique = true)
 	private String login;
 	
+	@JsonIgnore
 	private String password;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -59,7 +61,7 @@ public class User implements Serializable {
 	private Status status;
 	
 	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_has_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private List<Role> roles;
 

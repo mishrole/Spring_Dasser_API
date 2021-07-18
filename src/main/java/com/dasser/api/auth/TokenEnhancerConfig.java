@@ -1,6 +1,8 @@
 package com.dasser.api.auth;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ import com.dasser.api.entity.User;
 import com.dasser.api.service.UserService;
 
 @Component
-public class TokenEnhancerConfiguration implements TokenEnhancer {
+public class TokenEnhancerConfig implements TokenEnhancer {
 	
 	@Autowired
 	private UserService userService;
@@ -28,7 +30,6 @@ public class TokenEnhancerConfiguration implements TokenEnhancer {
 		information.put("name", user.getLastname() + ' ' + user.getFirstname());
 		information.put("email", user.getLogin());
 		information.put("role", user.getRoles());
-		
 		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(information);
 		return accessToken;
 		

@@ -12,7 +12,7 @@ public class Constant {
 	
 	public static final String APP_CONFIG_CLIENT = "dasser";
 	
-	public static final String APP_CLIENT_PASSWORD = "dasserpwd";
+	public static final String APP_CLIENT_PASSWORD = "1234";
 	
 	public static final String APP_RSA_PUBLIC = "-----BEGIN PUBLIC KEY-----\r\n"
 			+ "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApcoBkJCdPIAXI8tQVvg6\r\n"
