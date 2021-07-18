@@ -75,7 +75,7 @@ public class UserController {
 	
 	@ResponseBody
 	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<User>> search(@RequestParam(value = "login", required = false) String login, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "status", required = true) Integer status) {
+	public ResponseEntity<List<User>> search(@RequestParam(value = "login", required = false) String login, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "status", required = false, defaultValue = "1") Integer status) {
 		List<User> list = new ArrayList<>();
 		
 		try {
