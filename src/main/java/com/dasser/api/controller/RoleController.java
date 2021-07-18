@@ -1,8 +1,10 @@
 package com.dasser.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,15 @@ public class RoleController {
 	
 	@GetMapping
 	public ResponseEntity<List<Role>> list() {
-		return ResponseEntity.ok(roleService.listAll());
+		List<Role> list = new ArrayList<>();
+		
+		try {
+			list = roleService.listAll();
+		} catch (Exception e) {
+			return new ResponseEntity<List<Role>>(list, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return ResponseEntity.ok(list);
 	}
 	
 }

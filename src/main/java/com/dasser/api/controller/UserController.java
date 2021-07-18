@@ -1,5 +1,6 @@
 package com.dasser.api.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -46,23 +48,47 @@ public class UserController {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<User>> list() {
-		return ResponseEntity.ok(userService.listAllUsers());
+		List<User> list = new ArrayList<>();
+		
+		try {
+			list = userService.listAllUsers();
+		} catch(Exception e) {
+			return new ResponseEntity<List<User>>(list, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return ResponseEntity.ok(list);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<Optional<User>> find(@PathVariable("id") Integer id) {
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> find(@PathVariable("id") Integer id) {
 		Optional<User> user = userService.findUserById(id);
 		
 		if(user.isPresent()) {
 			return ResponseEntity.ok(user);
 		}
 		
-		return ResponseEntity.badRequest().build();
+		return Constant.responseMessage(HttpStatus.NOT_FOUND, "Error", "User doesn't exist");
 	}
 	
-	@PostMapping()
+	
+	@ResponseBody
+	@GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<User>> search(@RequestParam(value = "login", required = false) String login, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "status", required = true) Integer status) {
+		List<User> list = new ArrayList<>();
+		
+		try {
+			list = userService.searchUserByNameOrLoginOrStatus(login, name, status);
+		} catch (Exception e) {
+			return new ResponseEntity<List<User>>(list, HttpStatus.BAD_REQUEST);
+		}
+		
+		return ResponseEntity.ok(list);
+
+	}
+	
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> save(@RequestBody UserRequestModel requestUser) {
 		
 		try {
@@ -114,7 +140,7 @@ public class UserController {
 		}
 	}
 	
-	@PutMapping()
+	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody UserRequestModel requestUser) {
 		
 		try {
@@ -163,16 +189,16 @@ public class UserController {
 				return Constant.responseMessage(HttpStatus.OK, "Success", "User has been updated");
 				
 			} else {
-				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User doesn't exist");
+				return Constant.responseMessage(HttpStatus.NOT_FOUND, "Error", "User doesn't exist");
 			}
 	
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "An error occurred while performing the operation, the user has not been updated.");
+			return Constant.responseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Error", "An error occurred while performing the operation, the user has not been updated.");
 		}
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
 		
 		try {
@@ -204,15 +230,9 @@ public class UserController {
 	
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "An error occurred while performing the operation");
+			return Constant.responseMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Error", "An error occurred while performing the operation");
 		}
 
-	}
-	
-	@ResponseBody
-	@GetMapping(value = "/search")
-	public List<User> search(@RequestParam(value = "login", required = false) String login, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "status", required = false) Integer status) {
-		return userService.searchUserByNameOrLoginOrStatus(login, name, status);
 	}
 
 }

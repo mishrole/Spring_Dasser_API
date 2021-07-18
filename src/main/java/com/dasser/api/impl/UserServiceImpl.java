@@ -1,4 +1,4 @@
-package com.dasser.api.service;
+package com.dasser.api.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dasser.api.entity.User;
 import com.dasser.api.repository.UserRepository;
+import com.dasser.api.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
