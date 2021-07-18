@@ -19,8 +19,8 @@
 ### Functional Requirements
 
 Must be able to:
-- [ ] Register users
-- [ ] Update users
+- [X] Register users
+- [X] Update users
 - [X] Delete users**
 - [ ] Consult registered users
 

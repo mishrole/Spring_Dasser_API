@@ -160,7 +160,7 @@ public class UserController {
 					
 				}
 				
-				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Success", "User has been updated");
+				return Constant.responseMessage(HttpStatus.OK, "Success", "User has been updated");
 				
 			} else {
 				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User doesn't exist");
