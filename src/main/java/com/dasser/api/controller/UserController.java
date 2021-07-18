@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dasser.api.entity.UserRequestModel;
-import com.dasser.api.entity.SearchUser;
 import com.dasser.api.entity.Status;
 import com.dasser.api.entity.User;
 import com.dasser.api.entity.UserHasRole;
@@ -67,11 +67,12 @@ public class UserController {
 		
 		try {
 			
-			User objUser = new User();
-			
 			User isUserRegistered = userService.findUserByLogin(requestUser.getLogin());
 			
 			if(isUserRegistered == null) {
+				
+				User objUser = new User();
+				
 				String passwordBCypt = passwordEncoder.encode(requestUser.getPassword());
 				
 				BeanUtils.copyProperties(requestUser, objUser);
@@ -101,15 +102,15 @@ public class UserController {
 					}
 				}
 				
-				return Constant.responseMessage(HttpStatus.OK, "success", "User has been created.");
+				return Constant.responseMessage(HttpStatus.OK, "success", "User has been created");
 				
 			} else {
-				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User already exists.");
+				return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User already exists");
 			}
 	
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "An error occurred while performing the operation, the user has not been saved.");
+			return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "An error occurred while performing the operation, the user has not been saved");
 		}
 	}
 	
@@ -156,18 +157,19 @@ public class UserController {
 				
 			}
 			
-			return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User with id " + id + " doesn't exist.");
+			return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "User with id " + id + " doesn't exist");
 	
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Constant.responseMessage(HttpStatus.BAD_REQUEST, "Error", "An error occurred while performing the operation");
 		}
-		
+
 	}
 	
 	@ResponseBody
 	@GetMapping(value = "/search")
-	public List<User> search(@RequestBody SearchUser bean) {
-		return userService.searchUserByNameOrLoginOrStatus(bean);
+	public List<User> search(@RequestParam(value = "login", required = false) String login, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "status", required = false) Integer status) {
+		return userService.searchUserByNameOrLoginOrStatus(login, name, status);
 	}
+
 }

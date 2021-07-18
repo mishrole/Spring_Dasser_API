@@ -58,6 +58,7 @@ public class User implements Serializable {
 	@JoinColumn(name = "status", nullable = false, insertable = true, updatable = true)
 	private Status status;
 	
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_has_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private List<Role> roles;

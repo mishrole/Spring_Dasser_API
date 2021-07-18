@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dasser.api.entity.SearchUser;
 import com.dasser.api.entity.User;
 import com.dasser.api.repository.UserRepository;
 
@@ -24,8 +23,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	private UserRepository userRepository;
 	
 	@Override
-	public List<User> searchUserByNameOrLoginOrStatus(SearchUser bean) {
-		return userRepository.searchUserByNameOrLoginOrStatus(bean);
+	public List<User> searchUserByNameOrLoginOrStatus(String login, String name, Integer status) {
+		return userRepository.searchUser(login+"%", name+"%", status);
 	}
 	
 	@Override
@@ -71,4 +70,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	public void deleteUser(Integer id) {
 		userRepository.deleteById(id);
 	}
+
 }
