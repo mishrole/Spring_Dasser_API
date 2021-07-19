@@ -153,6 +153,10 @@ public class UserController {
 				
 				String passwordBCypt = passwordEncoder.encode(requestUser.getPassword());
 				
+				if(requestUser.getPassword().trim().length() < 1) {
+					objUser.setPassword(searchedUser.get().getPassword());
+				}
+				
 				if(passwordBCypt != searchedUser.get().getPassword()) {
 					objUser.setPassword(passwordBCypt);
 				}
