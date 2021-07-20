@@ -152,13 +152,10 @@ public class UserController {
 				BeanUtils.copyProperties(requestUser, objUser);
 				
 				String passwordBCypt = passwordEncoder.encode(requestUser.getPassword());
+				objUser.setPassword(passwordBCypt);
 				
 				if(requestUser.getPassword().trim().length() < 1) {
 					objUser.setPassword(searchedUser.get().getPassword());
-				}
-				
-				if(passwordBCypt != searchedUser.get().getPassword()) {
-					objUser.setPassword(passwordBCypt);
 				}
 				
 				objUser.setLogin(searchedUser.get().getLogin());

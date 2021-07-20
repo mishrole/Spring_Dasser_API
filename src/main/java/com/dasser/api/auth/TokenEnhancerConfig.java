@@ -28,6 +28,7 @@ public class TokenEnhancerConfig implements TokenEnhancer {
 		information.put("name", user.getLastname() + ' ' + user.getFirstname());
 		information.put("email", user.getLogin());
 		information.put("role", user.getRoles());
+		information.put("access", user.getStatus().getName());
 		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(information);
 		return accessToken;
 		
