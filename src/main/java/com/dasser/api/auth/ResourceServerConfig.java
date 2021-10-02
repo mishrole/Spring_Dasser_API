@@ -30,7 +30,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("https://dasserapi.herokuapp.com/", "https://heuristic-wozniak-cebe37.netlify.app/"));
+		configuration.setAllowedOrigins(Arrays.asList("https://dasserapi.herokuapp.com/", "https://heuristic-wozniak-cebe37.netlify.app/", "http://localhost:3000", "http://localhost:9191"));
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
